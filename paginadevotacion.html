@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votación de Libros</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 20px;
+        }
+        .person {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .stars {
+            display: inline-block;
+            cursor: pointer;
+        }
+        .stars span {
+            font-size: 2rem;
+            margin-right: 5px;
+        }
+        textarea {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        #results {
+            margin-top: 30px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Votación de Libros</h1>
+
+    <div class="person">
+        <h3>Nombre 1 - Libro 1</h3>
+        <div class="stars" data-person="1">
+            <span>&#11088;</span><span>&#11088;</span><span>&#11088;</span><span>&#11088;</span><span>&#11088;</span>
+        </div>
+        <textarea placeholder="Escribe una observación..." data-person="1"></textarea>
+    </div>
+
+    <div class="person">
+        <h3>Nombre 2 - Libro 2</h3>
+        <div class="stars" data-person="2">
+            <span>&#11088;</span><span>&#11088;</span><span>&#11088;</span><span>&#11088;</span><span>&#11088;</span>
+        </div>
+        <textarea placeholder="Escribe una observación..." data-person="2"></textarea>
+    </div>
+
+    <!-- Agrega más personas y libros aquí -->
+
+    <button id="showResults">Ver Resultados</button>
+
+    <div id="results" style="display:none;">
+        <h3>Resultados de Votación:</h3>
+        <div id="resultContent"></div>
+    </div>
+
+    <script>
+        const starsElements = document.querySelectorAll('.stars');
+        const results = {};
+
+        starsElements.forEach(stars => {
+            stars.addEventListener('click', function(e) {
+                if (e.target.tagName === 'SPAN') {
+                    let index = Array.from(stars.children).indexOf(e.target);
+                    const personId = stars.getAttribute('data-person');
+
+                    // Guardar el voto en el objeto results
+                    results[personId] = index + 1; // Guardamos el número de estrellas (1 a 5)
+
+                    // Actualizar el color de las estrellas
+                    for (let i = 0; i < stars.children.length; i++) {
+                        stars.children[i].style.color = i <= index ? 'gold' : 'gray';
+                    }
+                }
+            });
+        });
+
+        document.getElementById('showResults').addEventListener('click', function() {
+            const resultContent = document.getElementById('resultContent');
+            resultContent.innerHTML = ""; // Limpiar resultados anteriores
+
+            for (let personId in results) {
+                const starsCount = results[personId];
+                resultContent.innerHTML += `Nombre ${personId}: ${starsCount} estrellas<br>`;
+            }
+
+            document.getElementById('results').style.display = 'block';
+        });
+    </script>
+
+</body>
+</html>
